@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+        <title>Add Job</title>
+    </head>
+
+    <body class="container-fluid">
+        <div class="col-sm-12">
+            <div class="row mt-2">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-4">
+                    <h1 class="text-secondary ml-2">Demo Pages</h1>
+                </div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <ul>
+                        <li><a href="{{ url_for('addjob') }}">Add new Job to Database</a></li>
+                        <li><a href="{{ url_for('daywisejobs') }}">View List of Jobs Daywise</a></li>
+                        <li><a href="{{ url_for('jobsreport') }}">View List of Jobs for a Date Range</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    </body>
+
+</html>

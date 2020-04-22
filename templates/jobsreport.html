@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+        <title>Jobs Report</title>
+    </head>
+
+    <body class="container-fluid">
+        <form method="POST">
+            <div class="col-sm-12">
+                <div class="row mt-2">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                        <h1 class="text-secondary ml-2">Jobs Report</h1>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                        <h2 class="text-primary"><a href="{{ url_for('index') }}">Go Back to Home</a></h2>
+                    </div>
+                    <div class="col-sm-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <div class="form-group col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <label for="fromdate">From Date</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="todate">To Date</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="date" name="fromdate" class="form-control" id="fromdate" placeholder="From Date">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="date" name="todate" class="form-control" id="todate" placeholder="To Date">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="submit" value="Submit" class="btn btn-primary ml-4">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-sm-2"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th scope="col">Job ID</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Date (mm-dd-yy)</th>
+                                        <th scope="col">Time (hh:mm:ss)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list">
+                                    {% for job in jobs %}
+                                    <tr>
+                                        <td>{{ job['job_id'] }}</td>
+                                        <td>{{ job['user_name'] }}</td>
+                                        <td>{{ job['time'].strftime("%x") }}</td>
+                                        <td>{{ job['time'].strftime("%X") }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-2"></div>
+                </div>
+            </div>
+        </form>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    </body>
+
+</html>
