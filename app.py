@@ -7,6 +7,7 @@ from flask import url_for
 from flask import g
 from flask import current_app
 from datetime import datetime
+from waitress import serve
 import functools
 import flask 
 from db import *
@@ -58,4 +59,5 @@ def addjob():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    #app.run(host='0.0.0.0')
+    serve(app, host='0.0.0.0', port=5000)
