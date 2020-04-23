@@ -7,3 +7,6 @@ __pycache__
 .egg
 .out
 .log
+dfilter.egg-info
+.egg-info
+.env/
