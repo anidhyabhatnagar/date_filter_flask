@@ -1,3 +1,4 @@
+import pymongo
 from pymongo import MongoClient
 from datetime import datetime
 from datetime import timedelta
@@ -77,8 +78,8 @@ def get_jobs_for_date_range(from_date, to_date):
         {'_id': 0})
     return jobs
 
-def get_image_from_db(name='Eiffel Tower'):
-    record = db.images.find_one({'name': name})
+def get_image_from_db():
+    record = db.images.find_one()
     img = record['image']
     name = record['name']
     dbid = record['_id']
@@ -91,29 +92,40 @@ def get_image_from_db(name='Eiffel Tower'):
 def get_next_image_from_db(id):
     img = name = dbid = ''
     oid = ObjectId(id)
-    record = db.images.find_one({'_id': {'$gt': oid}})
-    if record is not None:
-#    for record in records:
+    records = db.images.find({'_id': {'$gt': oid}}).sort([('_id', pymongo.ASCENDING)]).limit(1)
+    for record in records:
+        print("Records in next: {}".format(record['name']))
         img = record['image']
         name = record['name']
         dbid = record['_id']
         imgbase = base64.b64encode(img)
         imgbase = imgbase.decode("utf-8")
-        return dbid, imgbase, name
+        return dbid, imgbase, name, True
     else:
-        print("Reached Last Record.")
-        name = "No More Images"
-    return id, img, name
+        record = db.images.find_one({'_id': oid})
+        id = record['_id']
+        name = record['name']
+        img = record['image']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+    return id, imgbase, name, False
 
 def get_previous_image_from_db(id):
     img = name = dbid = ''
     oid = ObjectId(id)
-    records = db.images.find({'_id': {'$lt': oid}}).sort({'natural': -1}).limit(1)
+    records = db.images.find({'_id': {'$lt': oid}}).sort([('_id', pymongo.DESCENDING)]).limit(1)
     for record in records:
         img = record['image']
         name = record['name']
         dbid = record['_id']
         imgbase = base64.b64encode(img)
         imgbase = imgbase.decode("utf-8")
-        return dbid, imgbase, name
-    return dbid, img, name
+        return dbid, imgbase, name, True
+    else:
+        record = db.images.find_one({'_id': oid})
+        id = record['_id']
+        name = record['name']
+        img = record['image']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+    return id, imgbase, name, False

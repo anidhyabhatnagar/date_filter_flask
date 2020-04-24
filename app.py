@@ -59,16 +59,26 @@ def addjob():
 
 @app.route("/viewimage", methods=["GET", "POST"])
 def viewimage():
-    dbid, img, name = get_image_from_db('Sheep')
-    return render_template('viewimage.html', image=img, id=dbid, name=name)
+    dbid, img, name = get_image_from_db()
+    return render_template('viewimage.html', image=img, id=dbid, name=name, isprev=False, isnext=True)
 
 @app.route('/next/', methods=["POST"])
 def next():
     print("Inside Next Route.")
     if request.method == "POST":
         id = request.form['id']
-        dbid, img, name = get_next_image_from_db(id)
-    return render_template('viewimage.html', id=dbid, image=img, name=name)
+        print("ID in Next Route: {}".format(id))
+        dbid, img, name, isnext = get_next_image_from_db(id)
+    return render_template('viewimage.html', id=dbid, image=img, name=name, isnext=isnext, isprev=True)
+
+@app.route('/previous/', methods=["POST"])
+def previous():
+    print("Inside Previous Route.")
+    if request.method == "POST":
+        id = request.form['id']
+        print("ID in Previous Route: {}".format(id))
+        dbid, img, name, isprev = get_previous_image_from_db(id)
+    return render_template('viewimage.html', id=dbid, image=img, name=name, isprev=isprev, isnext=True)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
