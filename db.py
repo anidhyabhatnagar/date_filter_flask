@@ -2,6 +2,9 @@ from pymongo import MongoClient
 from datetime import datetime
 from datetime import timedelta
 from random import randint
+from bson.binary import Binary
+from bson.objectid import ObjectId
+import base64
 
 
 client = MongoClient('localhost', 27017)
@@ -73,3 +76,44 @@ def get_jobs_for_date_range(from_date, to_date):
         ]}, 
         {'_id': 0})
     return jobs
+
+def get_image_from_db(name='Eiffel Tower'):
+    record = db.images.find_one({'name': name})
+    img = record['image']
+    name = record['name']
+    dbid = record['_id']
+    print("Initial Image #")
+    print("Image Name: {} \t Image ID: {}".format(record['name'], record['_id']))
+    imgbase = base64.b64encode(img)
+    imgbase = imgbase.decode("utf-8")
+    return dbid, imgbase, name
+
+def get_next_image_from_db(id):
+    img = name = dbid = ''
+    oid = ObjectId(id)
+    record = db.images.find_one({'_id': {'$gt': oid}})
+    if record is not None:
+#    for record in records:
+        img = record['image']
+        name = record['name']
+        dbid = record['_id']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+        return dbid, imgbase, name
+    else:
+        print("Reached Last Record.")
+        name = "No More Images"
+    return id, img, name
+
+def get_previous_image_from_db(id):
+    img = name = dbid = ''
+    oid = ObjectId(id)
+    records = db.images.find({'_id': {'$lt': oid}}).sort({'natural': -1}).limit(1)
+    for record in records:
+        img = record['image']
+        name = record['name']
+        dbid = record['_id']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+        return dbid, imgbase, name
+    return dbid, img, name

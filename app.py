@@ -57,7 +57,19 @@ def addjob():
         print("Inside Else")
     return render_template('addjob.html')
 
+@app.route("/viewimage", methods=["GET", "POST"])
+def viewimage():
+    dbid, img, name = get_image_from_db('Sheep')
+    return render_template('viewimage.html', image=img, id=dbid, name=name)
+
+@app.route('/next/', methods=["POST"])
+def next():
+    print("Inside Next Route.")
+    if request.method == "POST":
+        id = request.form['id']
+        dbid, img, name = get_next_image_from_db(id)
+    return render_template('viewimage.html', id=dbid, image=img, name=name)
 
 if __name__ == "__main__":
-    #app.run(host='0.0.0.0')
-    serve(app, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0')
+    #serve(app, host='0.0.0.0', port=5000)
