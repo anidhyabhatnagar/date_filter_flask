@@ -28,7 +28,6 @@ def jobsreport():
         to_date = request.form['todate']
         fdate = datetime.strptime(from_date, '%Y-%m-%d')
         tdate = datetime.strptime(to_date, '%Y-%m-%d')
-        #jobs = get_jobs_for_date(fdate)
         jobs = get_jobs_for_date_range(fdate, tdate)
     else:
         jobs = get_all_jobs()
@@ -52,9 +51,8 @@ def addjob():
         date = request.form['date']
         fdate = datetime.strptime(date, '%Y-%m-%d')
         status = add_job(job_id, name, fdate)
-        print("Job ID: {} \t Name: {} \t Date: {} \t Status: {}".format(job_id, name, date, status))
     else:
-        print("Inside Else")
+        pass
     return render_template('addjob.html')
 
 @app.route("/viewimage", methods=["GET", "POST"])
@@ -64,22 +62,18 @@ def viewimage():
 
 @app.route('/next/', methods=["POST"])
 def next():
-    print("Inside Next Route.")
     if request.method == "POST":
         id = request.form['id']
-        print("ID in Next Route: {}".format(id))
         dbid, img, name, isnext = get_next_image_from_db(id)
     return render_template('viewimage.html', id=dbid, image=img, name=name, isnext=isnext, isprev=True)
 
 @app.route('/previous/', methods=["POST"])
 def previous():
-    print("Inside Previous Route.")
     if request.method == "POST":
         id = request.form['id']
-        print("ID in Previous Route: {}".format(id))
         dbid, img, name, isprev = get_previous_image_from_db(id)
     return render_template('viewimage.html', id=dbid, image=img, name=name, isprev=isprev, isnext=True)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
-    #serve(app, host='0.0.0.0', port=5000)
+    #app.run(host='0.0.0.0')
+    serve(app, host='0.0.0.0', port=5000)

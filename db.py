@@ -1,4 +1,5 @@
 import pymongo
+import glob
 from pymongo import MongoClient
 from datetime import datetime
 from datetime import timedelta
@@ -45,6 +46,19 @@ def generate_data(records=20):
     else:
         print("Data exists in database. Skipping data generation.")
 
+    image_list = glob.glob1("img/","*.jpg")
+    if db.images.find().count() == 0:
+        print("Image Data Not Found! Generating Image Data with {} images.".format(len(image_list)))
+        for img_name in image_list:
+            with open('img/' + img_name, 'rb') as f:
+                byte_im = f.read()
+
+            binary_image = Binary(byte_im)
+            name = img_name.split('.')[0].strip().capitalize()
+            db.images.insert_one({'name': name, 'image': binary_image})
+    else:
+        print("Image Data exists in databse. Skipping Images data generation.")
+
 
 def get_job(jobid):
     job = db.jobs.find_one({'job_id' : jobid})
@@ -83,8 +97,6 @@ def get_image_from_db():
     img = record['image']
     name = record['name']
     dbid = record['_id']
-    print("Initial Image #")
-    print("Image Name: {} \t Image ID: {}".format(record['name'], record['_id']))
     imgbase = base64.b64encode(img)
     imgbase = imgbase.decode("utf-8")
     return dbid, imgbase, name
@@ -94,7 +106,6 @@ def get_next_image_from_db(id):
     oid = ObjectId(id)
     records = db.images.find({'_id': {'$gt': oid}}).sort([('_id', pymongo.ASCENDING)]).limit(1)
     for record in records:
-        print("Records in next: {}".format(record['name']))
         img = record['image']
         name = record['name']
         dbid = record['_id']
