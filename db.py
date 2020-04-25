@@ -140,3 +140,9 @@ def get_previous_image_from_db(id):
         imgbase = base64.b64encode(img)
         imgbase = imgbase.decode("utf-8")
     return id, imgbase, name, False
+
+def insert_uploaded_image_to_db(image, image_title):
+    byte_im = image.read()
+    binary_image = Binary(byte_im)
+    name = image_title
+    db.images.insert_one({'name': name, 'image': binary_image})
