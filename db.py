@@ -3,8 +3,11 @@ from datetime import datetime
 from datetime import timedelta
 from random import randint
 
+username = 'jobtestsys'
+password = 'JobTestSys#2021'
+host = '34.66.77.113'
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://%s:%s@%s/jobtest?authSource=jobtest' % (username, password, host))
 db = client['jobtest']
 
 def generate_data(records=20):
