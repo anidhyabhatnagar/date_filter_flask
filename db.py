@@ -2,10 +2,12 @@ from pymongo import MongoClient
 from datetime import datetime
 from datetime import timedelta
 from random import randint
+from app_configurations import AppConfigurations
 
-username = 'jobtestsys'
-password = 'JobTestSys#2021'
-host = '34.66.77.113'
+app_conf = AppConfigurations('.ini')
+username = app_conf.get_value('DEV', 'UserName')
+password = app_conf.get_value('DEV', 'Password')
+host = app_conf.get_value('DEV', 'Host')
 
 client = MongoClient('mongodb://%s:%s@%s/jobtest?authSource=jobtest' % (username, password, host))
 db = client['jobtest']

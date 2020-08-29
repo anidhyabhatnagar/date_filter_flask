@@ -10,9 +10,9 @@ from datetime import datetime
 from waitress import serve
 import functools
 import flask 
-from db import *
+from db import generate_data, get_all_jobs, get_jobs_for_date, get_jobs_for_date_range, get_job, add_job
 
-
+DATE_FORMAT = '%Y-%m-%d'
 app = Flask(__name__)
 
 @app.route("/")
@@ -26,9 +26,8 @@ def jobsreport():
     if request.method == "POST":
         from_date = request.form['fromdate']
         to_date = request.form['todate']
-        fdate = datetime.strptime(from_date, '%Y-%m-%d')
-        tdate = datetime.strptime(to_date, '%Y-%m-%d')
-        #jobs = get_jobs_for_date(fdate)
+        fdate = datetime.strptime(from_date, DATE_FORMAT)
+        tdate = datetime.strptime(to_date, DATE_FORMAT)
         jobs = get_jobs_for_date_range(fdate, tdate)
     else:
         jobs = get_all_jobs()
@@ -38,7 +37,7 @@ def jobsreport():
 def daywisejobs():
     if request.method == "POST":
         day = request.form['date']
-        date = datetime.strptime(day, '%Y-%m-%d')
+        date = datetime.strptime(day, DATE_FORMAT)
         jobs = get_jobs_for_date(date)
     else:
         jobs = get_all_jobs()
@@ -50,7 +49,7 @@ def addjob():
         job_id = int(request.form['jobid'])
         name = request.form['name']
         date = request.form['date']
-        fdate = datetime.strptime(date, '%Y-%m-%d')
+        fdate = datetime.strptime(date, DATE_FORMAT)
         status = add_job(job_id, name, fdate)
         print("Job ID: {} \t Name: {} \t Date: {} \t Status: {}".format(job_id, name, date, status))
     else:
@@ -59,5 +58,4 @@ def addjob():
 
 
 if __name__ == "__main__":
-    #app.run(host='0.0.0.0')
     serve(app, host='0.0.0.0', port=5000)

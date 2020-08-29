@@ -3,9 +3,14 @@ from datetime import datetime
 from datetime import timedelta
 from random import randint
 
-username = 'jobtestsys'
-password = 'JobTestSys#2021'
-host = '34.66.77.113'
+import configparser
+
+config = configparser.ConfigParser()
+config.read('.ini')
+
+username = config['DEV']['UserName']
+password = config['DEV']['Password']
+host = config['DEV']['Host']
 
 client = MongoClient('mongodb://%s:%s@%s/jobtest?authSource=jobtest' % (username, password, host))
 db = client['jobtest']
