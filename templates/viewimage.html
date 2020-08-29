@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+        <title>View Image</title>
+    </head>
+
+    <body class="container-fluid">
+        <div class="col-sm-12">
+            <div class="row mt-2">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-4">
+                    <h1 class="text-secondary ml-2">Image</h1>
+                </div>
+                <div class="col-sm-4">
+                    <h2 class="text-success ml-2 h1 text-right">{{ name }}</h2>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-4">
+                    <form action='/previous/', method="POST">
+                        <input type=text hidden id=id, value="{{ id }}", name="id">
+                        {% if isprev %}
+                        <button type="submit" value="Submit" class="btn btn-primary">Previous</button>
+                        {% else %}
+                        <button type="submit" disabled value="Submit" class="btn btn-primary">Previous</button>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="col-sm-4 text-right">
+                    <form action='/next/', method="POST">
+                        <input type=text hidden id=id, value="{{ id }}", name="id">
+                        {% if isnext %}
+                        <button type="submit" value="Submit" class="btn btn-primary">Next</button> 
+                        {% else %}
+                        <button type="submit" disabled value="Submit" class="btn btn-primary">Next</button>
+                        {% endif %}
+                    </form>                    
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8 text-center">
+                    <img src="data:image/jpg;base64,{{ image }}" class="img-fluid" alt="{{ name }}">
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    </body>
+
+</html>

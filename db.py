@@ -1,8 +1,14 @@
+import pymongo
+import glob
 from pymongo import MongoClient
 from datetime import datetime
 from datetime import timedelta
 from random import randint
 from app_configurations import AppConfigurations
+from bson.binary import Binary
+from bson.objectid import ObjectId
+import base64
+
 
 app_conf = AppConfigurations('.ini')
 username = app_conf.get_value('DEV', 'UserName')
@@ -46,6 +52,19 @@ def generate_data(records=20):
     else:
         print("Data exists in database. Skipping data generation.")
 
+    image_list = glob.glob1("img/","*.jpg")
+    if db.images.find().count() == 0:
+        print("Image Data Not Found! Generating Image Data with {} images.".format(len(image_list)))
+        for img_name in image_list:
+            with open('img/' + img_name, 'rb') as f:
+                byte_im = f.read()
+
+            binary_image = Binary(byte_im)
+            name = img_name.split('.')[0].strip().capitalize()
+            db.images.insert_one({'name': name, 'image': binary_image})
+    else:
+        print("Image Data exists in databse. Skipping Images data generation.")
+
 
 def get_job(jobid):
     job = db.jobs.find_one({'job_id' : jobid})
@@ -78,3 +97,58 @@ def get_jobs_for_date_range(from_date, to_date):
         ]}, 
         {'_id': 0})
     return jobs
+
+def get_image_from_db():
+    record = db.images.find_one()
+    img = record['image']
+    name = record['name']
+    dbid = record['_id']
+    imgbase = base64.b64encode(img)
+    imgbase = imgbase.decode("utf-8")
+    return dbid, imgbase, name
+
+def get_next_image_from_db(id):
+    img = name = dbid = ''
+    oid = ObjectId(id)
+    records = db.images.find({'_id': {'$gt': oid}}).sort([('_id', pymongo.ASCENDING)]).limit(1)
+    for record in records:
+        img = record['image']
+        name = record['name']
+        dbid = record['_id']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+        return dbid, imgbase, name, True
+    else:
+        record = db.images.find_one({'_id': oid})
+        id = record['_id']
+        name = record['name']
+        img = record['image']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+    return id, imgbase, name, False
+
+def get_previous_image_from_db(id):
+    img = name = dbid = ''
+    oid = ObjectId(id)
+    records = db.images.find({'_id': {'$lt': oid}}).sort([('_id', pymongo.DESCENDING)]).limit(1)
+    for record in records:
+        img = record['image']
+        name = record['name']
+        dbid = record['_id']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+        return dbid, imgbase, name, True
+    else:
+        record = db.images.find_one({'_id': oid})
+        id = record['_id']
+        name = record['name']
+        img = record['image']
+        imgbase = base64.b64encode(img)
+        imgbase = imgbase.decode("utf-8")
+    return id, imgbase, name, False
+
+def insert_uploaded_image_to_db(image, image_title):
+    byte_im = image.read()
+    binary_image = Binary(byte_im)
+    name = image_title
+    db.images.insert_one({'name': name, 'image': binary_image})

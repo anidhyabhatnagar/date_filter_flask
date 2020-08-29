@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <title>Upload Image</title>
+    </head>
+
+    <body class="container-fluid">
+            <div class="col-sm-12 mt-5">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-3">
+                        <h1 class="text-secondary ml-2">Upload Image</h1>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <h2 class="text-primary"><a href="{{ url_for('index') }}">Go Back to Home</a></h2>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6 border border-secondary rounded">
+                        <form class="was-validated" method="POST" enctype=multipart/form-data>
+                            <div class="row mt-3">
+                                <div class="form-group col-sm-6">
+                                    <label for="name">Image Title</label>
+                                    <input type="text" name="imagename" class="form-control" id="imagename" placeholder="Image Title" required>
+                                    <div class="invalid-feedback">Enter a valid title for image.</div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="uploadimageee">Upload Image</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="uploadimage" id="uploadimage" required>
+                                        <label class="custom-file-label" for="uploadimage">Choose file...</label>
+                                        <div class="invalid-feedback">Upload a valid .jpg image.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-sm-6">
+                                    <button type="submit" value="Upload" class="btn btn-primary">Upload</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+            </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script>
+            $('#uploadimage').on('change',function(){
+                //get the file name
+                var fileName = $(this).val();
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName);
+            })
+        </script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    </body>
+</html>
