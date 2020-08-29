@@ -6,4 +6,5 @@ class AppConfigurations:
         self.config.read(config_file)
         
     def get_value(self, section, key):
+        # Return respective section and key
         return self.config[section][key]
